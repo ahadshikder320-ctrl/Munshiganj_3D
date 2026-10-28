@@ -61,7 +61,9 @@ namespace Munshiganj.EditModeTests
 
             Assert.IsTrue(moved);
             Assert.AreEqual(1.5, resolved.x, 0.000001);
-            Assert.IsFalse(CollisionMath.OverlapsCircleBox(resolved, 0.5f, BoxMin, BoxMax));
+
+            // The circle now touches the box exactly, it does not sink into it.
+            Assert.AreEqual(0.5, CollisionMath.DistanceToBox(resolved, BoxMin, BoxMax), 0.000001);
         }
 
         [Test]
@@ -72,7 +74,10 @@ namespace Munshiganj.EditModeTests
                 new Float3(0f, 1f, 0f), 0.5f, BoxMin, BoxMax, out resolved);
 
             Assert.IsTrue(moved);
-            Assert.IsFalse(CollisionMath.OverlapsCircleBox(resolved, 0.5f, BoxMin, BoxMax));
+
+            // The circle left the box and now touches its surface.
+            Assert.AreEqual(0.5, CollisionMath.DistanceToBox(resolved, BoxMin, BoxMax), 0.000001);
+            Assert.IsFalse(CollisionMath.OverlapsBox(resolved, BoxMin, BoxMax));
         }
 
         [Test]
@@ -95,7 +100,10 @@ namespace Munshiganj.EditModeTests
                 new Float3(0f, 1f, 0f), 0.5f, BoxMin, BoxMax, out resolved);
 
             Assert.IsTrue(moved);
-            Assert.IsFalse(CollisionMath.OverlapsCircleBoxXZ(resolved, 0.5f, BoxMin, BoxMax));
+
+            // The circle left the footprint of the box and now touches its edge.
+            Assert.AreEqual(0.5, CollisionMath.DistanceToBoxXZ(resolved, BoxMin, BoxMax), 0.000001);
+            Assert.IsFalse(CollisionMath.OverlapsBoxXZ(resolved, BoxMin, BoxMax));
         }
 
         [Test]
