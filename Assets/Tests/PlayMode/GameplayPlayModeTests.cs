@@ -20,6 +20,7 @@ public class GameplayPlayModeTests
         spawner.obstacleSize = 2f;
         spawner.groundWidth = 40f;
         spawner.groundDepth = 40f;
+        spawner.spawnOnStart = false;
 
         Obstacle[] spawned = spawner.Spawn();
 
@@ -50,6 +51,7 @@ public class GameplayPlayModeTests
 
         Obstacle obstacle = obstacleObject.AddComponent<Obstacle>();
         obstacle.size = new Vector3(2f, 2f, 2f);
+        obstacle.ApplySize();
 
         GameObject player = GameObject.CreatePrimitive(PrimitiveType.Capsule);
         player.tag = "Player";

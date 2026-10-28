@@ -99,6 +99,7 @@ public class GameBootstrap : MonoBehaviour
         spawner.obstacleSize = obstacleSize;
         spawner.groundWidth = groundWidth;
         spawner.groundDepth = groundDepth;
+        spawner.spawnOnStart = false;
         spawner.Spawn();
     }
 
