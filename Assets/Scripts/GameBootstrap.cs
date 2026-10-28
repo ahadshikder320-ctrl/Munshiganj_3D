@@ -32,6 +32,8 @@ public class GameBootstrap : MonoBehaviour
         BuildLight();
     }
 
+    Transform playerTransform;
+
     void BuildGround()
     {
         GameObject ground = new GameObject("Ground");
@@ -52,6 +54,8 @@ public class GameBootstrap : MonoBehaviour
         player.tag = "Player";
         player.transform.SetParent(transform, false);
         player.transform.position = new Vector3(0f, 1f, 0f);
+
+        playerTransform = player.transform;
 
         player.AddComponent<PlayerController>();
 
@@ -79,7 +83,7 @@ public class GameBootstrap : MonoBehaviour
         camera.fieldOfView = 60f;
 
         FollowCamera followCamera = cameraObject.AddComponent<FollowCamera>();
-        followCamera.target = GameObject.Find("Player").transform;
+        followCamera.target = playerTransform;
         followCamera.SnapToTarget();
     }
 
@@ -121,6 +125,10 @@ public class GameBootstrap : MonoBehaviour
 
             Collider collider = pickupObject.GetComponent<Collider>();
             collider.isTrigger = true;
+
+            Rigidbody body = pickupObject.AddComponent<Rigidbody>();
+            body.isKinematic = true;
+            body.useGravity = false;
 
             Pickup pickup = pickupObject.AddComponent<Pickup>();
             pickup.value = ScoreCounter.PickupValue;
