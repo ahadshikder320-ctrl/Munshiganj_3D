@@ -70,7 +70,11 @@ namespace Munshiganj.Tests
         {
             PlaneMeshData data = PlaneMeshBuilder.Build(8f, 6f, 1, 1);
 
-            Assert.AreEqual(8f * 6f, (data.Positions[3] - data.Positions[0]) * (data.Positions[5 + 2] - data.Positions[2]), Tolerance);
+            float width = data.Positions[3] - data.Positions[0];
+            float depth = data.Positions[8] - data.Positions[2];
+
+            Assert.AreEqual(8f, width, Tolerance);
+            Assert.AreEqual(6f, depth, Tolerance);
         }
 
         [Test]
