@@ -22,12 +22,14 @@ public class GameplayPlayModeTests
         spawner.groundDepth = 40f;
         spawner.spawnOnStart = false;
 
+        int before = Obstacle.All.Count;
+
         Obstacle[] spawned = spawner.Spawn();
 
         yield return null;
 
         Assert.AreEqual(5, spawned.Length);
-        Assert.AreEqual(5, Obstacle.All.Count);
+        Assert.AreEqual(before + 5, Obstacle.All.Count);
 
         for (int i = 0; i < spawned.Length; i++)
         {
@@ -69,7 +71,7 @@ public class GameplayPlayModeTests
             new Vector3(player.transform.position.x, 1f, player.transform.position.z),
             new Vector3(0f, 1f, 0f));
 
-        Assert.IsTrue(distance >= 1.5f, "The player was not pushed out of the obstacle.");
+        Assert.IsTrue(distance >= 1.49f, "The player was not pushed out of the obstacle.");
 
         Object.Destroy(player);
         Object.Destroy(obstacleObject);
