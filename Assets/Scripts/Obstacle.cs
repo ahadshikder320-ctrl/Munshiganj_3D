@@ -41,10 +41,8 @@ public class Obstacle : MonoBehaviour
         }
 
         Transform cached = transform;
-        cached.localScale = new Vector3(
-            size.x / 2f,
-            size.y / 2f,
-            size.z / 2f);
+        // The Unity cube primitive is one unit wide, so the scale has to match the size.
+        cached.localScale = size;
 
         MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
         if (meshRenderer != null)

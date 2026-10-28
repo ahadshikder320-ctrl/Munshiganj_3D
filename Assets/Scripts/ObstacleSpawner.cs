@@ -14,9 +14,15 @@ public class ObstacleSpawner : MonoBehaviour
     public float groundWidth = 60f;
     public float groundDepth = 60f;
 
+    /// <summary>When true the obstacles are spawned automatically on the first frame.</summary>
+    public bool spawnOnStart = true;
+
     void Start()
     {
-        Spawn();
+        if (spawnOnStart)
+        {
+            Spawn();
+        }
     }
 
     /// <summary>Creates the obstacles and returns the spawned objects.</summary>
