@@ -26,8 +26,14 @@ mcs -optimize+ -out:"$OUTPUT" \
     Assets/Scripts/Core/FollowMath.cs \
     Assets/Scripts/Core/PlaneMeshBuilder.cs \
     Assets/Scripts/Core/PlayerInputMath.cs \
+    Assets/Scripts/Core/CollisionMath.cs \
+    Assets/Scripts/Core/ObstacleSpawnMath.cs \
+    Assets/Scripts/Core/ScoreCounter.cs \
     Assets/Tests/EditMode/CoreMathTests.cs \
     Assets/Tests/EditMode/PlaneMeshBuilderTests.cs \
+    Assets/Tests/EditMode/CollisionMathTests.cs \
+    Assets/Tests/EditMode/ObstacleSpawnMathTests.cs \
+    Assets/Tests/EditMode/ScoreCounterTests.cs \
     Tests/Portable/MiniNUnit.cs \
     Tests/Portable/PortableTestRunner.cs
 
