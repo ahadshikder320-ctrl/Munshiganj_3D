@@ -26,7 +26,7 @@ namespace Munshiganj.Core
         }
 
         /// <summary>
-        /// True when a circle (the player) intersects the box (an obstacle).
+        /// True when a circle (the player) intersects the box (an obstacle) in 3D.
         /// </summary>
         public static bool OverlapsCircleBox(Float3 center, float radius, Float3 boxMin, Float3 boxMax)
         {
@@ -116,6 +116,103 @@ namespace Munshiganj.Core
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// True when the circle overlaps the box on the XZ plane. The vertical axis is
+        /// ignored, which is what the player on the ground plane needs.
+        /// </summary>
+        public static bool OverlapsCircleBoxXZ(Float3 center, float radius, Float3 boxMin, Float3 boxMax)
+        {
+            if (radius < 0f)
+            {
+                throw new ArgumentOutOfRangeException("radius", "Radius must not be negative.");
+            }
+
+            float closestX = Clamp(center.x, boxMin.x, boxMax.x);
+            float closestZ = Clamp(center.z, boxMin.z, boxMax.z);
+            float deltaX = center.x - closestX;
+            float deltaZ = center.z - closestZ;
+
+            return (deltaX * deltaX) + (deltaZ * deltaZ) <= radius * radius;
+        }
+
+        /// <summary>
+        /// Moves the circle out of the box on the XZ plane along the shortest way out.
+        /// The Y coordinate stays untouched.
+        /// </summary>
+        public static bool ResolveCircleBoxXZ(
+            Float3 center,
+            float radius,
+            Float3 boxMin,
+            Float3 boxMax,
+            out Float3 resolved)
+        {
+            if (radius < 0f)
+            {
+                throw new ArgumentOutOfRangeException("radius", "Radius must not be negative.");
+            }
+
+            resolved = center;
+
+            if (!OverlapsCircleBoxXZ(center, radius, boxMin, boxMax))
+            {
+                return false;
+            }
+
+            float closestX = Clamp(center.x, boxMin.x, boxMax.x);
+            float closestZ = Clamp(center.z, boxMin.z, boxMax.z);
+            float deltaX = center.x - closestX;
+            float deltaZ = center.z - closestZ;
+            float distanceSquared = (deltaX * deltaX) + (deltaZ * deltaZ);
+
+            if (distanceSquared > 1e-12f)
+            {
+                float distance = (float)Math.Sqrt(distanceSquared);
+                resolved = new Float3(
+                    closestX + ((deltaX / distance) * radius),
+                    center.y,
+                    closestZ + ((deltaZ / distance) * radius));
+
+                return true;
+            }
+
+            // The center is inside the footprint of the box: leave through the closest face.
+            float toMinX = center.x - boxMin.x;
+            float toMaxX = boxMax.x - center.x;
+            float toMinZ = center.z - boxMin.z;
+            float toMaxZ = boxMax.z - center.z;
+
+            float smallest = toMinX;
+            resolved = new Float3(boxMin.x - radius, center.y, center.z);
+
+            if (toMaxX < smallest)
+            {
+                smallest = toMaxX;
+                resolved = new Float3(boxMax.x + radius, center.y, center.z);
+            }
+
+            if (toMinZ < smallest)
+            {
+                smallest = toMinZ;
+                resolved = new Float3(center.x, center.y, boxMin.z - radius);
+            }
+
+            if (toMaxZ < smallest)
+            {
+                resolved = new Float3(center.x, center.y, boxMax.z + radius);
+            }
+
+            return true;
+        }
+
+        /// <summary>Clamps a position into the given rectangle on the XZ plane.</summary>
+        public static Float3 ClampToBoundsXZ(Float3 position, float halfWidth, float halfDepth)
+        {
+            return new Float3(
+                Clamp(position.x, -halfWidth, halfWidth),
+                position.y,
+                Clamp(position.z, -halfDepth, halfDepth));
         }
 
         static float Clamp(float value, float min, float max)
