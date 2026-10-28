@@ -26,6 +26,29 @@ namespace Munshiganj.Core
         }
 
         /// <summary>
+        /// Distance between the point and the box. Zero when the point is inside the box.
+        /// </summary>
+        public static float DistanceToBox(Float3 point, Float3 boxMin, Float3 boxMax)
+        {
+            Float3 delta = point - ClosestPointOnBox(point, boxMin, boxMax);
+            return delta.Magnitude;
+        }
+
+        /// <summary>
+        /// Distance between the point and the footprint of the box on the XZ plane.
+        /// Zero when the point is inside the footprint.
+        /// </summary>
+        public static float DistanceToBoxXZ(Float3 point, Float3 boxMin, Float3 boxMax)
+        {
+            float closestX = Clamp(point.x, boxMin.x, boxMax.x);
+            float closestZ = Clamp(point.z, boxMin.z, boxMax.z);
+            float deltaX = point.x - closestX;
+            float deltaZ = point.z - closestZ;
+
+            return (float)Math.Sqrt((deltaX * deltaX) + (deltaZ * deltaZ));
+        }
+
+        /// <summary>
         /// True when a circle (the player) intersects the box (an obstacle) in 3D.
         /// </summary>
         public static bool OverlapsCircleBox(Float3 center, float radius, Float3 boxMin, Float3 boxMax)
