@@ -142,6 +142,15 @@ namespace Munshiganj.Core
         }
 
         /// <summary>
+        /// True when the point is inside the footprint of the box on the XZ plane.
+        /// </summary>
+        public static bool OverlapsBoxXZ(Float3 point, Float3 boxMin, Float3 boxMax)
+        {
+            return point.x >= boxMin.x && point.x <= boxMax.x &&
+                   point.z >= boxMin.z && point.z <= boxMax.z;
+        }
+
+        /// <summary>
         /// True when the circle overlaps the box on the XZ plane. The vertical axis is
         /// ignored, which is what the player on the ground plane needs.
         /// </summary>
