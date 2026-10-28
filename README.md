@@ -15,13 +15,21 @@ Assets/
       FollowMath.cs                  # Lerp / লার্প ফ্যাক্টর / ফলো পজিশন
       PlaneMeshBuilder.cs            # নতুন PlaneMesh (vertex, normal, UV, index)
       PlayerInputMath.cs             # yaw-সাপেক্ষিক মুভমেন্ট ডিরেকশন
+      CollisionMath.cs               # অ্যাক্সিস-অ্যালাইন্ড বক্স কোলিশন ও রিজলভ
+      ObstacleSpawnMath.cs           # ডিটারমিনিস্টিক বাধার spawn লেআউট
+      ScoreCounter.cs                # রাউন্ডের স্কোর ও বেস্ট স্কোর
     FollowCamera.cs                  # ব্যবহারকারীর কোড, কোর ম্যাথের উপর রিফ্যাক্টর করা
     GroundPlane.cs                   # রানটাইমে PlaneMesh তৈরি করে মেঝা সেট করে
     PlayerController.cs              # WASD/আই-জোয়াইন মুভমেন্ট
-    GameBootstrap.cs                 # সিন বিল্ড: মেঝা + প্লেয়ার + ক্যামেরা + লাইট
+    PlayerCollision.cs               # বাধার সাথে কোলিশন ও মেঝার সীমায় আটকে রাখা
+    Obstacle.cs                      # বাধার বক্স ও তার world bounds
+    ObstacleSpawner.cs               # বাধা স্পawn করে
+    Pickup.cs                        # সংগ্রহযোগ্য আইটেম (স্কোর দেয়)
+    GameManager.cs                   # স্কোর রাখে ও স্ক্রিনে দেখায়
+    GameBootstrap.cs                 # সিন বিল্ড: মেঝা + প্লেয়ার + ক্যামেরা + বাধা + পিকআপ
   Tests/
-    EditMode/                        # কোর ম্যাথ ও PlaneMesh ইউনিট টেস্ট
-    PlayMode/                        # ক্যামেরা ও মেঝার রানটাইম টেস্ট
+    EditMode/                        # কোর ম্যাথ, PlaneMesh, কোলিশন, spawn ও স্কোর ইউনিট টেস্ট
+    PlayMode/                        # ক্যামেরা, মেঝা, বাধা, কোলিশন ও স্কোরের রানটাইম টেস্ট
 Packages/manifest.json
 ProjectSettings/
 Tests/Portable/                     # ইউনিটি ছাড়া (headless) টেস্ট রানার ও মিনি NUnit শিম
@@ -47,3 +55,7 @@ bash scripts/run-tests.sh
   দীর্ঘ ফ্রেমে ক্যামেরা ওভারশুট করে না।
 - মেঝাটি ইউনিটির বিল্ট-ইন Plane প্রিফ্যাবের বদলে কোড দিয়ে তৈরি হয়, তাই সেগমেন্ট সংখ্যা,
   সাইজ ও রঙ ইনস্পেক্টর থেকে বদলানো যায়।
+- বাধার লেআউট `ObstacleSpawnMath.Plan` দিয়ে নির্ধারিত হয়, তাই একই সিডে একই বাধা পাওয়া যায়
+  এবং প্লেয়ারের জন্মপয়ের চারপাশে খালি জায়গা থাকে।
+- কোলিশন গণনা `CollisionMath`-এ (ইঞ্জিন-স্বাধীন) থাকে; `PlayerCollision` শুধু ফলাফলটি
+  ট্রান্সফর্মে প্রয়োগ করে, তাই আচরণটি ইউনিটি ছাড়াও টেস্ট করা যায়।
